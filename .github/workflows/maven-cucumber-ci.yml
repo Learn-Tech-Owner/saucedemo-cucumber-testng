@@ -1,0 +1,48 @@
+name: CI - Cucumber Selenium Tests
+
+on:
+  push:
+    branches:
+      - develop # Ou votre branche principale, ex: 'master', 'develop'
+  pull_request:
+    branches:
+      - main # Idem
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # Utilisation d'un runner Ubuntu (recommandé pour Selenium en CI)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Cloner le dépôt
+
+      - name: Set up JDK 17 # Ou la version de Java que vous utilisez
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin' # Ou 'adopt', 'zulu', etc.
+
+      - name: Cache Maven dependencies # Accélère les builds en mettant en cache les dépendances Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2 # Chemin du cache Maven
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Install Google Chrome # Installation de Chrome pour les tests Selenium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable # Installe la version stable de Chrome
+
+      # Si vous utilisez Firefox :
+      # - name: Install Firefox
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y firefox
+
+      - name: Run Maven Tests # Exécuter les tests Maven, y compris Cucumber et Selenium
+        run: mvn clean install -Dheadless.mode=true # Nettoie, installe les dépendances et exécute les tests
+        # Note: -Dheadless.mode=true passe la propriété au Surefire plugin, qui la rend disponible à votre code Java
+        # Si vous utilisez un navigateur spécifique ou d'autres profils Maven:
+        # run: mvn clean install -Dbrowser=chrome -Dheadless.mode=true -Pci-profile
