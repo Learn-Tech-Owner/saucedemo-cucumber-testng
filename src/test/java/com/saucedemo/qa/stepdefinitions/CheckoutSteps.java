@@ -10,7 +10,7 @@ import org.testng.Assert;
 public class CheckoutSteps {
 
     private CheckoutPage checkoutPage;
-    private InventoryPage inventoryPage;
+    protected InventoryPage inventoryPage;
 
     public CheckoutSteps() {
         this.checkoutPage = new CheckoutPage(Hooks.driver);

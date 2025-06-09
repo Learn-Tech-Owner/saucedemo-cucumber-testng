@@ -5,6 +5,9 @@ import com.saucedemo.qa.pages.LoginPage; // Pour la page de connexion
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -44,7 +47,7 @@ public class MenuSteps {
     @Then("le menu burger devrait être fermé")
     public void le_menu_burger_devrait_etre_ferme() {
         // Vérifiez que l'icône de fermeture n'est plus visible (ou l'icône d'ouverture est visible)
-        Hooks.driver.manage().timeouts().implicitlyWait(0, java.util.concurrent.TimeUnit.SECONDS); // Désactive l'attente implicite
+        Hooks.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // Désactive l'attente implicite
         try {
             Hooks.driver.findElement(By.id("react-burger-cross-btn")).isDisplayed();
             Assert.fail("Le menu burger n'est pas fermé.");
@@ -52,13 +55,13 @@ public class MenuSteps {
             // Attendu: l'élément n'est pas trouvé ou n'est plus interactif
             Assert.assertTrue(true);
         } finally {
-            Hooks.driver.manage().timeouts().implicitlyWait(10, java.util.concurrent.TimeUnit.SECONDS); // Réactive l'attente implicite
+            Hooks.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // Réactive l'attente implicite
         }
     }
 
     @And("je clique sur le lien {string}")
     public void je_clique_sur_le_lien(String linkText) {
-        WebElement link = Hooks.driver.findElement(By.xpath("//a[text()='" + linkText + "']"));
+        //WebElement link = Hooks.driver.findElement(By.xpath("//a[text()='" + linkText + "']"));
         inventoryPage.waitForElementToBeClickable(By.xpath("//a[text()='" + linkText + "']")).click();
     }
 

@@ -1,6 +1,5 @@
 package com.saucedemo.qa.stepdefinitions;
 
-import com.beust.jcommander.Parameter;
 import com.saucedemo.qa.utils.WebDriverFactory;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
